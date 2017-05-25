@@ -17,11 +17,9 @@ const io = socketIO(requestHandler);
 // Game Server
 const SpaaaceServerEngine = require(path.join(__dirname, 'src/server/SpaaaceServerEngine.js'));
 const SpaaaceGameEngine = require(path.join(__dirname, 'src/common/SpaaaceGameEngine.js'));
-const SimplePhysicsEngine = require('lance-gg').physics.SimplePhysicsEngine;
 
 // Game Instances
-const physicsEngine = new SimplePhysicsEngine({ collisionOptions: { COLLISION_DISTANCE: 50 } } );
-const gameEngine = new SpaaaceGameEngine({ physicsEngine });
+const gameEngine = new SpaaaceGameEngine();
 const serverEngine = new SpaaaceServerEngine(io, gameEngine, { timeoutInterval: 60 * 5 , debug: {} });
 
 // start the game

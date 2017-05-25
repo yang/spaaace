@@ -1,6 +1,7 @@
 'use strict';
 
 const GameEngine = require('lance-gg').GameEngine;
+const SimplePhysicsEngine = require('lance-gg').physics.SimplePhysicsEngine;
 const Missile= require('./Missile');
 const Ship = require('./Ship');
 const TwoVector = require('lance-gg').serialize.TwoVector;
@@ -23,6 +24,9 @@ class SpaaaceGameEngine extends GameEngine {
             width: 3000,
             height: 3000
         };
+
+        this.physicsEngine = new SimplePhysicsEngine({ collisionOptions: { COLLISION_DISTANCE: 50 } } );
+        this.physicsEngine.init({ gameEngine: this });
 
         this.on('collisionStart', function(e) {
             let collisionObjects = Object.keys(e).map(k => e[k]);
@@ -84,11 +88,12 @@ class SpaaaceGameEngine extends GameEngine {
     };
 
     // Makes a new ship, places it randomly and adds it to the game world
-    makeShip(playerId) {
+    makeShip(playerId, name) {
         let newShipX = Math.floor(Math.random()*(this.worldSettings.width-200)) + 200;
         let newShipY = Math.floor(Math.random()*(this.worldSettings.height-200)) + 200;
 
         let ship = new Ship(++this.world.idCount, this, new TwoVector(newShipX, newShipY));
+        ship.name = name;
         ship.playerId = playerId;
         this.addObjectToWorld(ship);
         console.log(`ship added: ${ship.toString()}`);

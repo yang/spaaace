@@ -290,6 +290,8 @@ class SpaaaceRenderer extends Renderer {
             this.sprites[objData.id] = sprite;
             sprite.id = objData.id;
 
+            shipActor.changeName(objData.name);
+
             if (this.clientEngine.isOwnedByPlayer(objData)) {
                 this.playerShip = sprite; // save reference to the player ship
                 sprite.actor.shipSprite.tint = 0XFF00FF; // color  player ship
@@ -440,6 +442,7 @@ class SpaaaceRenderer extends Renderer {
         if (data.RTTAverage){ qs('.averageLatencyData').innerHTML = truncateDecimals(data.RTTAverage, 2);}
     }
 
+    // TODO: remove the update-score mechanism, use objects.
     updateScore(data){
         let scoreContainer = qs('.score');
         let scoreArray = [];
@@ -463,11 +466,7 @@ class SpaaaceRenderer extends Renderer {
                 scoreContainer.appendChild(scoreEl);
             }
 
-            // stupid string/number conversion
-            if (this.sprites[parseInt(id)])
-                this.sprites[parseInt(id)].actor.changeName(data[id].name);
-
-            scoreEl.innerHTML = `${data[id].name}: ${data[id].kills}`;
+            scoreEl.innerHTML = `${this.gameEngine.world.objects[id].name}: ${data[id].kills}`;
 
             scoreArray.push({
                 el: scoreEl,

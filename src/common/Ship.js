@@ -2,18 +2,18 @@
 
 const Serializer = require('lance-gg').serialize.Serializer;
 const DynamicObject = require('lance-gg').serialize.DynamicObject;
-const Utils = require('./Utils');
 
 class Ship extends DynamicObject {
 
     static get netScheme() {
         return Object.assign({
+            name: { type: Serializer.TYPES.STRING },
             showThrust: { type: Serializer.TYPES.INT32 }
         }, super.netScheme);
     }
 
     toString() {
-        return `${this.isBot?'Bot':'Player'}::Ship::${super.toString()}`;
+        return `Ship::${this.name}::${super.toString()}`;
     }
 
     get bendingAngleLocalMultiple() { return 0.0; }
@@ -21,6 +21,9 @@ class Ship extends DynamicObject {
     syncTo(other) {
         super.syncTo(other);
         this.showThrust = other.showThrust;
+        if (other.name) {
+            this.name = other.name;
+        }
     }
 
     constructor(id, gameEngine, x, y) {
